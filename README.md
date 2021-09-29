@@ -66,7 +66,7 @@ dependencies {
 var params: EventCentreParams = EventCentreParams(
     operator = "[OPERATOR-NAME]",
     sport = "golf",
-    version = "latest",
+    version = "5.x",
     eventId = "207",
     targetModule = "full",
     language = "en"
