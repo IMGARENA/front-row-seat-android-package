@@ -72,7 +72,7 @@ dependencies {
 |targetModule |string           | specifies the module that the app should display |
 |language     |string           | ISO code for the language of the translations    |
 
-##### Golf Modularisation
+#### Golf Modularisation
 
 The Event centre supports being initialised in seven different modular configurations, Provide the required module to the library:
 
@@ -87,7 +87,7 @@ The Event centre supports being initialised in seven different modular configura
 |groups              |Group Only                                      |-                                                                   |
 
 
-##### Sample initialisation for **Golf**:
+#### Sample initialisation for **Golf**:
 
 ```kotlin
 var params: EventCentreParams = EventCentreParams(
@@ -111,7 +111,7 @@ params.initialContext = mapOf(
 
 
 
-##### UFC Modularisation
+#### UFC Modularisation
 
 The UFC Event Centre supports being initialised in 3 different modular configurations. This is done by providing the module name within the "targetModule" field:
 
@@ -121,7 +121,7 @@ The UFC Event Centre supports being initialised in 3 different modular configura
 |fight               |Single fight                                       |
 |Fightcard           |Only displays the fightcard - allows no navigation |
 
-Sample initialisation for **UFC**:
+#### Sample initialisation for **UFC**:
 
 ```kotlin
 var params: EventCentreParams = EventCentreParams(
