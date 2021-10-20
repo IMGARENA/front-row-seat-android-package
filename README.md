@@ -87,7 +87,7 @@ The Event centre supports being initialised in seven different modular configura
 |groups              |Group Only                                      |-                                                                   |
 
 
-##### Sample initialisation for **Golf**:
+##### Sample initialisation for **Golf**:
 
 ```kotlin
 var params: EventCentreParams = EventCentreParams(
