@@ -62,6 +62,33 @@ dependencies {
 ### Initialiasing de SDK
 
 #### Configuration parameters
+
+|Name         |Type             |Description                                       |
+|:------------|:----------------|:-------------------------------------------------|
+|operator     |string           | your unique operator Id name                     |
+|sport        |string           | "golf" or "ufc"                                  |
+|version      |string           | the version of the Event Centre                  |
+|eventId      |string           | refers to the event you wish to display          |
+|targetModule |string           | specifies the module that the app should display |
+|language     |string           | ISO code for the language of the translations    |
+
+##### Golf Modularisation
+
+The Event centre supports being initialised in seven different modular configurations, Provide the required module to the library:
+
+|Module name         |Description                                     |Notes                                                               |
+|:-------------------|:-----------------------------------------------|:-------------------------------------------------------------------|
+|full                |All Event Centre                                |-                                                                   |
+|leaderboard         |Leaderboard Only (no global navigation)         |-                                                                   |
+|leaderboarddetail   |eaderboard & Team/Player (no global navigation) |-                                                                   |
+|course              |Course & Hole Only (no global navigation)       |-                                                                   |
+|hole                |Hole Only (No navigation back to Course)        |holeNo must be passed in initialContext, see below for more details |
+|groupdetail         |Groups List & Group Detail                      |-                                                                   |
+|groups              |Group Only                                      |-                                                                   |
+
+
+##### Sample initialisation for **Golf**:
+
 ```kotlin
 var params: EventCentreParams = EventCentreParams(
     operator = "[OPERATOR-NAME]",
@@ -81,12 +108,43 @@ params.initialContext = mapOf(
 )
 
 ```
- 
+
+
+
+##### UFC Modularisation
+
+The UFC Event Centre supports being initialised in 3 different modular configurations. This is done by providing the module name within the "targetModule" field:
+
+|Module name         |Description                                        |
+|:-------------------|:--------------------------------------------------|
+|full                |Access to the full UFC Event Centre                |
+|fight               |Single fight                                       |
+|Fightcard           |Only displays the fightcard - allows no navigation |
+
+Sample initialisation for **UFC**:
+
+```kotlin
+var params: EventCentreParams = EventCentreParams(
+    operator = "[OPERATOR-NAME]",
+    sport = "ufc",
+    version = "5.x",
+    eventId = "eventID",
+    targetModule = "full",
+    language = "en"
+)
+
+// Optionally initialise a context
+params.initialContext = mapOf(
+	"view" to "Fight",
+	"fightId" to "fightID"
+)
+
+```
+
 #### Creating the Event Center instance
 ```kotlin
 var imga = EventCentre(container, params )
 ```
-
 
 ### Event Centre: Emitting Messages
 
@@ -111,31 +169,29 @@ There is a convinience method to update the context:
 fun updateContext ( context: EventCentreContext) {
 ```
 
-This method will update the context of the widget, and receives only the parameter context of type **EventCentreContext**. This type is a subclass of **EventCentreMessage**  and contains the following properties:
+This method will update the context of the widget, and receives only the parameter context of type **EventCentreContext**. This type is a subclass of **EventCentreMessage**.
 
-|Name.    |Type             |Description                                       |
-|:--------|:----------------|:-------------------------------------------------|
-|view     |string           |The name of the active view                       |
-|roundNo  |number or string |The round the user is currently viewing data from |
-|holeNo   |number or string |The hole the user is currently viewing data from  |
-|playerNo |number or string |The player's ID                                   |
-|groupNo  |number or string |The group's ID                                    |
+#### GOLF context params
+
+|Name         |Type             |Description                                       |
+|:------------|:----------------|:-------------------------------------------------|
+|view         |string           |The name of the active view                       |
+|tournamentId |number or string |Identifier for the tournament                     |
+|roundNo      |number or string |The round the user is currently viewing data from |
+|holeNo       |number or string |The hole the user is currently viewing data from  |
+|playerNo     |number or string |The player's ID                                   |
+|groupNo      |number or string |The group's ID                                    |
+|courseId     |number or string |The course's ID                                   |
 
 
-#### Updating the Selection
-There is a convinience method to update the selection:
+#### UFC context params
 
-```kotlin
-fun updateSelection ( selection: EventCentreSelection) {
-```
+|Name         |Type             |Description                                            |
+|:------------|:----------------|:------------------------------------------------------|
+|view         |string           |The name of the active view                            |
+|eventId      |number or string |Event ID as defined by the DDE                         |
+|fightId      |number or string |Fight ID as defined by DDE. Available for view = fight |
 
-This method will update the selection of the widget, and receives only the parameter selection of type **EventCentreSelection**. This type is a subclass of **EventCentreMessage**  and contains the following properties:
-
-|Name.    |Type      |Description                                             |
-|:--------|:---------|:-------------------------------------------------------|
-|marketId |string    |supplied by Mustard                                     |
-|betId    |string    |supplied by Mustard                                     |
-|selected |boolean   |whether or not the UI state should display as selected  |
 
 
 ### Event Centre: Receiving Messages
@@ -177,8 +233,6 @@ The **EventCentreMessageTopics** enumcontains the following values:
 * CONTEXT_UPDATE: Topic for covering general UI state updates, for example navigation changes or the user selecting a player in the UI.
 * SELECTION_UPDATE: Dedicated topic for handling user selection updates. The selected field within the message data handles both selecting and deselecting updates.
 * ERROR: Topic sent if the SDK had any problem to be initialized. This topic is emitted by the integration library, it should only be subscribed to, not emitted.
-
-
 
 ### Stop the sdk
 
